@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
 
 const Login = () => {
@@ -20,9 +21,15 @@ const Login = () => {
   const [role, setRole] = useState('Admin/OrderTaker/Biller');
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
   const handleSignIn = () => {
-    // Handle sign in logic here
+    // Test email and password
+    if(emailRegex.test(email) && password.length>=8){
+      navigation.navigate('AdminHome', { email, role });
+    }else{
+      Alert.alert('Invalid Email or Password')
+    }
     console.log('Sign in pressed', { email, password, role });
   };
 
@@ -31,6 +38,7 @@ const Login = () => {
     navigation.navigate('SignUp')
     console.log('Create account pressed');
   };
+  
   return (
     <SafeAreaView style={styles.container}>  
     <ScrollView style={{flexGrow: 1}}>

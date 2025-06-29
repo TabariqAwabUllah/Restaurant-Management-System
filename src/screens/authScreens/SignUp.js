@@ -8,20 +8,53 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
+import { useNavigation } from '@react-navigation/native';
 
 const SignUp = () => {
+    const navigation = useNavigation()
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [role, setRole] = useState('OrderTaker');
+  const [role, setRole] = useState('Admin');
   const [showDropdown, setShowDropdown] = useState(false);
+  // const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
-  const handleSignUp = () => {
+  const handleSignUp = async (email,password) => {
     // Handle sign up logic here
-    console.log('Sign up pressed', { fullName, email, password, confirmPassword, phoneNumber, role });
+    console.log("Print sign up1 ");
+    
+    // if(emailRegex.test(email)){ //validate email format
+    //   console.log("print if");
+      
+        // creating user in firebase
+        try {
+          const userDetails = await auth().createUserWithEmailAndPassword( email, password)
+          // console.log("User account created & signed in!", userDetails);
+          Alert.alert('Success', 'Account created successfully!');
+          navigation.navigate('AdminHome') 
+        } catch (error) {
+          console.log('Error creating user:', error.message);
+          Alert.alert('Error', error.code);
+          if(error.code === 'auth/email-already-in-use') {
+            Alert.alert("Email already in use", "Please use a different email.");
+          }
+          if(error.code === 'auth/weak-password'){
+            Alert.alert("Weak Password", "Password should be at least 6 characters long.");
+          }                   
+        }
+        
+    // }
+    // else{
+    //     Alert.alert('Invalid Email', 'Please enter a valid email address.');
+    //     return;
+    // }
+    
+    console.log('Sign up pressed', { email, password });
   };
 
   const handleGoogleSignUp = () => {
@@ -47,7 +80,7 @@ const SignUp = () => {
 
         {/* Form */}
         <View style={styles.formContainer}>
-          <View style={styles.inputContainer}>
+          {/* <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>👤 Full Name</Text>
             <TextInput
               style={styles.input}
@@ -57,7 +90,7 @@ const SignUp = () => {
               autoCapitalize="words"
               autoFocus={true}
             />
-          </View>
+          </View> */}
 
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>📧 Email Address</Text>
@@ -71,7 +104,7 @@ const SignUp = () => {
             />
           </View>
 
-          <View style={styles.inputContainer}>
+          {/* <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>📱 Phone Number</Text>
             <TextInput
               style={styles.input}
@@ -80,7 +113,7 @@ const SignUp = () => {
               onChangeText={setPhoneNumber}
               keyboardType="phone-pad"
             />
-          </View>
+          </View> */}
 
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>🔒 Password</Text>
@@ -93,7 +126,7 @@ const SignUp = () => {
             />
           </View>
 
-          <View style={styles.inputContainer}>
+          {/* <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>🔒 Confirm Password</Text>
             <TextInput
               style={styles.input}
@@ -102,9 +135,9 @@ const SignUp = () => {
               onChangeText={setConfirmPassword}
               secureTextEntry
             />
-          </View>
+          </View> */}
 
-          <View style={styles.inputContainer}>
+          {/* <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Role</Text>
             <View style={styles.pickerContainer}>
               <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
@@ -128,9 +161,9 @@ const SignUp = () => {
                 </View>
               )}
             </View>
-          </View>
+          </View> */}
 
-          <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
+          <TouchableOpacity style={styles.signUpButton} onPress={()=>{handleSignUp(email,password)}}>
             <Text style={styles.signUpButtonText}>Create Account</Text>
           </TouchableOpacity>
 

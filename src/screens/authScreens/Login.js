@@ -11,6 +11,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 const Login = () => {
 
@@ -23,13 +24,17 @@ const Login = () => {
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
-  const handleSignIn = () => {
-    // Test email and password
-    if(emailRegex.test(email) && password.length>=8){
-      navigation.navigate('AdminHome', { email, role });
-    }else{
-      Alert.alert('Invalid Email or Password')
+  const handleSignIn = async (email, password) => {
+    
+    try {
+      await auth().signInWithEmailAndPassword(email, password)
+      navigation.navigate('AdminHome') // Navigate to AdminHome on successful sign in
+    } catch (error) {
+      console.log('Error signing in:', error.message);
+      Alert.alert('Error', error.code);
+      
     }
+    
     console.log('Sign in pressed', { email, password, role });
   };
 
@@ -115,7 +120,7 @@ const Login = () => {
 
         </View>
 
-        <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
+        <TouchableOpacity style={styles.signInButton} onPress={()=>{handleSignIn(email, password)}}>
         <Text style={styles.signInButtonText}>Sign In Securely</Text>
         </TouchableOpacity>
 

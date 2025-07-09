@@ -13,6 +13,7 @@ import {
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
 import { useNavigation } from '@react-navigation/native';
+import MainButton from '../../components/MainButton';
 
 const SignUp = () => {
     const navigation = useNavigation()
@@ -172,9 +173,17 @@ const SignUp = () => {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.signUpButton} onPress={()=>{handleSignUp(email,password, fullName, phoneNumber,role)}}>
+          {/* <TouchableOpacity style={styles.signUpButton} onPress={()=>{handleSignUp(email,password, fullName, phoneNumber,role)}}>
             <Text style={styles.signUpButtonText}>Create Account</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+
+        <MainButton buttonName={'Create Account'}
+          onPress={()=>{handleSignUp(email,password, fullName, phoneNumber,role)}}
+        />
+          
+          
+          {/* Or Google Sign Up */}
+
 
           <Text style={styles.orText}>or</Text>
 

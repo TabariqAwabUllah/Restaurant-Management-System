@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
+import MainButton from '../../components/MainButton';
 
 const Login = () => {
 
@@ -35,7 +36,7 @@ const Login = () => {
       console.log('User Document:', userDoc);
       if(userDoc.exists) {
         if(userDoc.data().role === role){
-          navigation.navigate('AdminHome') // Navigate to AdminHome on successful sign in
+          navigation.navigate('AdminHome', {Name: userDoc.data().fullName}) // Navigate to AdminHome on successful sign in
         }else{
           Alert.alert('Access Denied', 'You do not have permission to access this area.');
         }
@@ -133,9 +134,9 @@ const Login = () => {
 
         </View>
 
-        <TouchableOpacity style={styles.signInButton} onPress={()=>{handleSignIn(email, password, role)}}>
-        <Text style={styles.signInButtonText}>Sign In Securely</Text>
-        </TouchableOpacity>
+
+        <MainButton buttonName={'Sign In Securely'}
+        onPress={()=>{handleSignIn(email, password, role)}}/>
 
         <Text style={styles.orText}>or</Text>
 
@@ -284,18 +285,6 @@ const styles = StyleSheet.create({
   picker: {
     height: 0,
     opacity: 0,
-  },
-  signInButton: {
-    backgroundColor: '#6366f1',
-    borderRadius: 8,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  signInButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
   },
   orText: {
     textAlign: 'center',
